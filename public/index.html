@@ -5,23 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome to Firebase Hosting</title>
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/8.6.8/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/8.6.8/firebase-auth.js"></script>
-    <script defer src="/__/firebase/8.6.8/firebase-database.js"></script>
-    <script defer src="/__/firebase/8.6.8/firebase-firestore.js"></script>
-    <script defer src="/__/firebase/8.6.8/firebase-functions.js"></script>
-    <script defer src="/__/firebase/8.6.8/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/8.6.8/firebase-storage.js"></script>
-    <script defer src="/__/firebase/8.6.8/firebase-analytics.js"></script>
-    <script defer src="/__/firebase/8.6.8/firebase-remote-config.js"></script>
-    <script defer src="/__/firebase/8.6.8/firebase-performance.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-functions.js"></script>
 
     <style media="screen">
       body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
@@ -41,11 +30,59 @@
   <body>
     <div id="message">
       <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+      <h1>Firebase Google Sign In</h1>
+      <p>Click down below for Google sign in</p>
+      <p>You have to make sure to have Google Account</p>
+      <a id="google-signIn" href="javascript:googleSignIn()">Google Sign in</a>
     </div>
     <p id="load">Firebase SDK Loading&hellip;</p>
+
+    <script>
+
+    //↓Put your firebaseConfig
+    var firebaseConfig = {
+      apiKey: "",
+      authDomain: "",
+      projectId: "",
+      storageBucket: "",
+      messagingSenderId: "",
+      appId: "",
+      measurementId: ""
+  };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    var auth =  new firebase.auth();
+    const functions = new firebase.functions();
+    const db = firebase.firestore();
+    auth.useEmulator("http://localhost:9099", { disableWarnings: true });
+    functions.useEmulator("http://localhost:5001");
+    db.settings({host: "localhost:8080", ssl: false});
+
+    auth.onAuthStateChanged(function(user) {
+
+          if (user) {
+            // User is signed in.
+      
+            console.log("AuthStateChanged", user)
+            
+            window.location.replace("/signedIn.html");
+            
+          } else {
+            // No user is signed in.
+      
+            console.log("no user is signed in")
+          }
+        });
+
+      function googleSignIn() {
+        var auth =  new firebase.auth();
+        var provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithRedirect(provider);
+      }
+      
+    </script>
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
